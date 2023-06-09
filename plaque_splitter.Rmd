@@ -1,0 +1,410 @@
+---
+title: "OHT"
+author: "Stanley Ho"
+date: "2023-06-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("tidyverse")
+library(tidyverse)
+```
+
+
+```{r}
+setwd("C:/Users/stanl/OneDrive - The University of Western Ontario/OHT")
+```
+
+```{r}
+plaque_raw <- read.csv("2023-Open-data-plaques-ENG_new.csv")
+```
+
+```{r}
+plaque_theme <- plaque_raw
+```
+
+```{r}
+plaque_theme[c('Theme.1', 'Theme.2', 'Theme.3', 'Theme.4', 'Theme.5', 'Theme.6', 'Theme.7')] <- str_split_fixed(plaque_raw$Themes, ', ', 7)
+```
+
+```{r}
+plaque_location <- plaque_theme
+```
+
+```{r}
+plaque_location[c('Region', 'County.District', 'Municipality')] <- str_split_fixed(plaque_theme$Geo.location, ', ', 3)
+```
+
+```{r}
+unique(plaque_location$Municipality)
+```
+
+```{r}
+plaque_location$County.District[plaque_location$County.District=="United Counties of Stormont"]<-"United Counties of Stormont, Dundas and Glengarry"
+```
+
+```{r}
+plaque_location_UCSDG <- subset(plaque_location, County.District == "United Counties of Stormont, Dundas and Glengarry")
+```
+
+```{r}
+unique(plaque_location_UCSDG$Municipality)
+```
+
+```{r}
+plaque_location$Municipality[plaque_location$Municipality=="Dundas and Glengarry, Township of South Glengarry"]<-"Township of South Glengarry"
+plaque_location$Municipality[plaque_location$Municipality=="Dundas and Glengarry, Township of South Stormont"]<-"Township of South Stormont"
+plaque_location$Municipality[plaque_location$Municipality=="Dundas and Glengarry, City of Cornwall"]<-"City of Cornwall"
+plaque_location$Municipality[plaque_location$Municipality=="Dundas and Glengarry, Township of South Dundas"]<-"Township of South Dundas"
+plaque_location$Municipality[plaque_location$Municipality=="Dundas and Glengarry, Township of North Glengarry"]<-"Township of North Glengarry"
+```
+
+```{r}
+unique(plaque_location$Municipality)
+```
+
+```{r}
+unique(plaque_location$Region)
+```
+
+```{r}
+unique(plaque_location$County.District)
+```
+
+```{r}
+plaque_Ontario <- subset(plaque_location, Region != "International")
+```
+
+```{r}
+unique(plaque_Ontario$Region)
+```
+
+```{r}
+unique(plaque_Ontario$County.District)
+```
+
+```{r}
+unique(plaque_Ontario$Municipality)
+```
+
+```{r}
+plaque_Ontario_final <- plaque_Ontario[, c(1:3,8:14,15:17,4:5)]
+```
+
+```{r}
+themetable1 <- unique(plaque_Ontario_final$Theme.1)
+themetable1
+```
+
+
+```{r}
+plaque_Ontario_final$Agriculture <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Agriculture"){
+      plaque_Ontario_final[i, "Agriculture"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Archaeology <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Archaeology"){
+      plaque_Ontario_final[i, "Archaeology"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Artsculture <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Arts and culture"){
+      plaque_Ontario_final[i, "Artsculture"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Blackheritage <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Black heritage"){
+      plaque_Ontario_final[i, "Blackheritage"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Buildingsstructures <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Buildings and structures"){
+      plaque_Ontario_final[i, "Buildingsstructures"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Communities <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Communities"){
+      plaque_Ontario_final[i, "Communities"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Disasters <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Disasters"){
+      plaque_Ontario_final[i, "Disasters"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Education <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Education"){
+      plaque_Ontario_final[i, "Education"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Environment <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Environment"){
+      plaque_Ontario_final[i, "Environment"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Exploration <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Exploration"){
+      plaque_Ontario_final[i, "Exploration"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$FirstNations <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "First Nations"){
+      plaque_Ontario_final[i, "FirstNations"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Franco <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Franco-Ontarian heritage"){
+      plaque_Ontario_final[i, "Franco"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Furtrade <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Fur trade"){
+      plaque_Ontario_final[i, "Furtrade"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Industry <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Industry and trade"){
+      plaque_Ontario_final[i, "Industry"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Organizations <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Organizations"){
+      plaque_Ontario_final[i, "Organizations"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$People <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "People"){
+      plaque_Ontario_final[i, "People"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Politics <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Politics and law"){
+      plaque_Ontario_final[i, "Politics"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Religion <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Religion"){
+      plaque_Ontario_final[i, "Religion"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Scientific <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Scientific and technological innovations"){
+      plaque_Ontario_final[i, "Scientific"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Sports <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Sports and recreation"){
+      plaque_Ontario_final[i, "Sports"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Transportation <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Transportation systems and communications"){
+      plaque_Ontario_final[i, "Transportation"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Warconflict <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "War and conflict"){
+      plaque_Ontario_final[i, "Warconflict"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final$Womenhist <- 0
+i <- 1
+while (i <= nrow(plaque_Ontario_final)){
+  j <- 4
+  while (j <= 10) {
+    if(plaque_Ontario_final[i,j] == "Women's history"){
+      plaque_Ontario_final[i, "Womenhist"] <- 1
+    }
+  j <- j + 1}
+i <- i + 1}
+```
+
+```{r}
+plaque_Ontario_final2 <- plaque_Ontario_final[, c(1:3,16:38,11:15)]
+```
+
+```{r}
+write.csv(plaque_Ontario_final2, "2023-Open-data-plaques-ENG-ONT_2.csv")
+```
+
